@@ -34,45 +34,45 @@ class EnvironmentManager
     public function saveDatabaseVariables(DatabaseEnvironmentRequest $request)
     {
         $oldDatabaseData =
-            'DB_CONNECTION='.config('database.default')."\n";
+            'DB_CONNECTION=' . config('database.default') . "\n";
 
         $newDatabaseData =
-            'DB_CONNECTION='.$request->database_connection."\n";
+            'DB_CONNECTION=' . $request->database_connection . "\n";
 
         if ($request->has('database_username') && $request->has('database_password')) {
             if (env('DB_USERNAME') && env('DB_HOST')) {
-                $oldDatabaseData = $oldDatabaseData.
-                    'DB_HOST='.config('database.connections.'.config('database.default').'.host')."\n".
-                    'DB_PORT='.config('database.connections.'.config('database.default').'.port')."\n".
-                    'DB_DATABASE='.config('database.connections.'.config('database.default').'.database')."\n".
-                    'DB_USERNAME='.config('database.connections.'.config('database.default').'.username')."\n".
-                    'DB_PASSWORD="'.config('database.connections.'.config('database.default').'.password')."\"\n\n";
+                $oldDatabaseData = $oldDatabaseData .
+                    'DB_HOST=' . config('database.connections.' . config('database.default') . '.host') . "\n" .
+                    'DB_PORT=' . config('database.connections.' . config('database.default') . '.port') . "\n" .
+                    'DB_DATABASE=' . config('database.connections.' . config('database.default') . '.database') . "\n" .
+                    'DB_USERNAME=' . config('database.connections.' . config('database.default') . '.username') . "\n" .
+                    'DB_PASSWORD="' . config('database.connections.' . config('database.default') . '.password') . "\"\n\n";
             } else {
-                $oldDatabaseData = $oldDatabaseData.
-                    'DB_DATABASE='.config('database.connections.'.config('database.default').'.database')."\n\n";
+                $oldDatabaseData = $oldDatabaseData .
+                    'DB_DATABASE=' . config('database.connections.' . config('database.default') . '.database') . "\n\n";
             }
 
-            $newDatabaseData = $newDatabaseData.
-                'DB_HOST='.$request->database_hostname."\n".
-                'DB_PORT='.$request->database_port."\n".
-                'DB_DATABASE='.$request->database_name."\n".
-                'DB_USERNAME='.$request->database_username."\n".
-                'DB_PASSWORD="'.$request->database_password."\"\n\n";
+            $newDatabaseData = $newDatabaseData .
+                'DB_HOST=' . $request->database_hostname . "\n" .
+                'DB_PORT=' . $request->database_port . "\n" .
+                'DB_DATABASE=' . $request->database_name . "\n" .
+                'DB_USERNAME=' . $request->database_username . "\n" .
+                'DB_PASSWORD="' . $request->database_password . "\"\n\n";
         } else {
             if (env('DB_USERNAME') && env('DB_HOST')) {
-                $oldDatabaseData = $oldDatabaseData.
-                    'DB_HOST='.config('database.connections.'.config('database.default').'.host')."\n".
-                    'DB_PORT='.config('database.connections.'.config('database.default').'.port')."\n".
-                    'DB_DATABASE='.config('database.connections.'.config('database.default').'.database')."\n".
-                    'DB_USERNAME='.config('database.connections.'.config('database.default').'.username')."\n".
-                    'DB_PASSWORD="'.config('database.connections.'.config('database.default').'.password')."\"\n\n";
+                $oldDatabaseData = $oldDatabaseData .
+                    'DB_HOST=' . config('database.connections.' . config('database.default') . '.host') . "\n" .
+                    'DB_PORT=' . config('database.connections.' . config('database.default') . '.port') . "\n" .
+                    'DB_DATABASE=' . config('database.connections.' . config('database.default') . '.database') . "\n" .
+                    'DB_USERNAME=' . config('database.connections.' . config('database.default') . '.username') . "\n" .
+                    'DB_PASSWORD="' . config('database.connections.' . config('database.default') . '.password') . "\"\n\n";
             } else {
-                $oldDatabaseData = $oldDatabaseData.
-                    'DB_DATABASE='.config('database.connections.'.config('database.default').'.database')."\n\n";
+                $oldDatabaseData = $oldDatabaseData .
+                    'DB_DATABASE=' . config('database.connections.' . config('database.default') . '.database') . "\n\n";
             }
 
-            $newDatabaseData = $newDatabaseData.
-                'DB_DATABASE='.$request->database_name."\n\n";
+            $newDatabaseData = $newDatabaseData .
+                'DB_DATABASE=' . $request->database_name . "\n\n";
         }
 
         try {
@@ -87,11 +87,11 @@ class EnvironmentManager
             //     ];
             // }
 
-            if (\Schema::hasTable('users')) {
-                return [
-                    'error' => 'database_should_be_empty',
-                ];
-            }
+            // if (\Schema::hasTable('users')) {
+            //     return [
+            //         'error' => 'database_should_be_empty',
+            //     ];
+            // }
         } catch (Exception $e) {
             return [
                 'error_message' => $e->getMessage(),
@@ -106,21 +106,21 @@ class EnvironmentManager
             ));
 
             file_put_contents($this->envPath, str_replace(
-                'APP_URL='.config('app.url'),
-                'APP_URL='.$request->app_url,
+                'APP_URL=' . config('app.url'),
+                'APP_URL=' . $request->app_url,
                 file_get_contents($this->envPath)
             ));
 
             file_put_contents($this->envPath, str_replace(
-                'SANCTUM_STATEFUL_DOMAINS='.env('SANCTUM_STATEFUL_DOMAINS'),
-                'SANCTUM_STATEFUL_DOMAINS='.$request->app_domain,
+                'SANCTUM_STATEFUL_DOMAINS=' . env('SANCTUM_STATEFUL_DOMAINS'),
+                'SANCTUM_STATEFUL_DOMAINS=' . $request->app_domain,
                 file_get_contents($this->envPath)
             ));
 
 
             file_put_contents($this->envPath, str_replace(
-                'SESSION_DOMAIN='.config('session.domain'),
-                'SESSION_DOMAIN='.explode(':', $request->app_domain)[0],
+                'SESSION_DOMAIN=' . config('session.domain'),
+                'SESSION_DOMAIN=' . explode(':', $request->app_domain)[0],
                 file_get_contents($this->envPath)
             ));
         } catch (Exception $e) {
@@ -186,7 +186,7 @@ class EnvironmentManager
             config('crater.min_php_version')
         );
 
-        if (! $phpSupportInfo['supported']) {
+        if (!$phpSupportInfo['supported']) {
             return $phpSupportInfo;
         }
 
@@ -213,10 +213,9 @@ class EnvironmentManager
                 );
 
                 break;
-
         }
 
-        if (! $dbSupportInfo['supported']) {
+        if (!$dbSupportInfo['supported']) {
             return $dbSupportInfo;
         }
 
@@ -224,11 +223,11 @@ class EnvironmentManager
     }
 
     /**
-    * Save the mail content to the .env file.
-    *
-    * @param Request $request
-    * @return array
-    */
+     * Save the mail content to the .env file.
+     *
+     * @param Request $request
+     * @return array
+     */
     public function saveMailVariables(MailEnvironmentRequest $request)
     {
         $mailData = $this->getMailData($request);
@@ -249,7 +248,7 @@ class EnvironmentManager
             } else {
                 file_put_contents(
                     $this->envPath,
-                    "\n".$mailData['extra_mail_data'],
+                    "\n" . $mailData['extra_mail_data'],
                     FILE_APPEND
                 );
             }
@@ -274,141 +273,141 @@ class EnvironmentManager
 
         if (env('MAIL_FROM_ADDRESS') !== null && env('MAIL_FROM_NAME') !== null) {
             $mailFromCredential =
-                'MAIL_FROM_ADDRESS='.config('mail.from.address')."\n".
-                'MAIL_FROM_NAME="'.config('mail.from.name')."\"\n\n";
+                'MAIL_FROM_ADDRESS=' . config('mail.from.address') . "\n" .
+                'MAIL_FROM_NAME="' . config('mail.from.name') . "\"\n\n";
         }
 
         switch ($request->mail_driver) {
             case 'smtp':
 
                 $oldMailData =
-                    'MAIL_DRIVER='.config('mail.driver')."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
+                    'MAIL_DRIVER=' . config('mail.driver') . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
                     $mailFromCredential;
 
                 $newMailData =
-                    'MAIL_DRIVER='.$request->mail_driver."\n".
-                    'MAIL_HOST='.$request->mail_host."\n".
-                    'MAIL_PORT='.$request->mail_port."\n".
-                    'MAIL_USERNAME='.$request->mail_username."\n".
-                    'MAIL_PASSWORD='.$request->mail_password."\n".
-                    'MAIL_ENCRYPTION='.$request->mail_encryption."\n\n".
-                    'MAIL_FROM_ADDRESS='.$request->from_mail."\n".
-                    'MAIL_FROM_NAME="'.$request->from_name."\"\n\n";
+                    'MAIL_DRIVER=' . $request->mail_driver . "\n" .
+                    'MAIL_HOST=' . $request->mail_host . "\n" .
+                    'MAIL_PORT=' . $request->mail_port . "\n" .
+                    'MAIL_USERNAME=' . $request->mail_username . "\n" .
+                    'MAIL_PASSWORD=' . $request->mail_password . "\n" .
+                    'MAIL_ENCRYPTION=' . $request->mail_encryption . "\n\n" .
+                    'MAIL_FROM_ADDRESS=' . $request->from_mail . "\n" .
+                    'MAIL_FROM_NAME="' . $request->from_name . "\"\n\n";
 
                 break;
 
             case 'mailgun':
                 $oldMailData =
-                    'MAIL_DRIVER='.config('mail.driver')."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
+                    'MAIL_DRIVER=' . config('mail.driver') . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
                     $mailFromCredential;
 
                 $newMailData =
-                    'MAIL_DRIVER='.$request->mail_driver."\n".
-                    'MAIL_HOST='.$request->mail_host."\n".
-                    'MAIL_PORT='.$request->mail_port."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.$request->mail_encryption."\n\n".
-                    'MAIL_FROM_ADDRESS='.$request->from_mail."\n".
-                    'MAIL_FROM_NAME="'.$request->from_name."\"\n\n";
+                    'MAIL_DRIVER=' . $request->mail_driver . "\n" .
+                    'MAIL_HOST=' . $request->mail_host . "\n" .
+                    'MAIL_PORT=' . $request->mail_port . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . $request->mail_encryption . "\n\n" .
+                    'MAIL_FROM_ADDRESS=' . $request->from_mail . "\n" .
+                    'MAIL_FROM_NAME="' . $request->from_name . "\"\n\n";
 
                 $extraMailData =
-                    'MAILGUN_DOMAIN='.$request->mail_mailgun_domain."\n".
-                    'MAILGUN_SECRET='.$request->mail_mailgun_secret."\n".
-                    'MAILGUN_ENDPOINT='.$request->mail_mailgun_endpoint."\n";
+                    'MAILGUN_DOMAIN=' . $request->mail_mailgun_domain . "\n" .
+                    'MAILGUN_SECRET=' . $request->mail_mailgun_secret . "\n" .
+                    'MAILGUN_ENDPOINT=' . $request->mail_mailgun_endpoint . "\n";
 
                 if (env('MAILGUN_DOMAIN') !== null && env('MAILGUN_SECRET') !== null && env('MAILGUN_ENDPOINT') !== null) {
                     $extraOldMailData =
-                        'MAILGUN_DOMAIN='.config('services.mailgun.domain')."\n".
-                        'MAILGUN_SECRET='.config('services.mailgun.secret')."\n".
-                        'MAILGUN_ENDPOINT='.config('services.mailgun.endpoint')."\n";
+                        'MAILGUN_DOMAIN=' . config('services.mailgun.domain') . "\n" .
+                        'MAILGUN_SECRET=' . config('services.mailgun.secret') . "\n" .
+                        'MAILGUN_ENDPOINT=' . config('services.mailgun.endpoint') . "\n";
                 }
 
                 break;
 
             case 'ses':
                 $oldMailData =
-                    'MAIL_DRIVER='.config('mail.driver')."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
+                    'MAIL_DRIVER=' . config('mail.driver') . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
                     $mailFromCredential;
 
                 $newMailData =
-                    'MAIL_DRIVER='.$request->mail_driver."\n".
-                    'MAIL_HOST='.$request->mail_host."\n".
-                    'MAIL_PORT='.$request->mail_port."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.$request->mail_encryption."\n\n".
-                    'MAIL_FROM_ADDRESS='.$request->from_mail."\n".
-                    'MAIL_FROM_NAME="'.$request->from_name."\"\n\n";
+                    'MAIL_DRIVER=' . $request->mail_driver . "\n" .
+                    'MAIL_HOST=' . $request->mail_host . "\n" .
+                    'MAIL_PORT=' . $request->mail_port . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . $request->mail_encryption . "\n\n" .
+                    'MAIL_FROM_ADDRESS=' . $request->from_mail . "\n" .
+                    'MAIL_FROM_NAME="' . $request->from_name . "\"\n\n";
 
                 $extraMailData =
-                    'SES_KEY='.$request->mail_ses_key."\n".
-                    'SES_SECRET='.$request->mail_ses_secret."\n";
+                    'SES_KEY=' . $request->mail_ses_key . "\n" .
+                    'SES_SECRET=' . $request->mail_ses_secret . "\n";
 
                 if (env('SES_KEY') !== null && env('SES_SECRET') !== null) {
                     $extraOldMailData =
-                        'SES_KEY='.config('services.ses.key')."\n".
-                        'SES_SECRET='.config('services.ses.secret')."\n";
+                        'SES_KEY=' . config('services.ses.key') . "\n" .
+                        'SES_SECRET=' . config('services.ses.secret') . "\n";
                 }
 
                 break;
 
             case 'mail':
                 $oldMailData =
-                    'MAIL_DRIVER='.config('mail.driver')."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
+                    'MAIL_DRIVER=' . config('mail.driver') . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
                     $mailFromCredential;
 
                 $newMailData =
-                    'MAIL_DRIVER='.$request->mail_driver."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
-                    'MAIL_FROM_ADDRESS='.$request->from_mail."\n".
-                    'MAIL_FROM_NAME="'.$request->from_name."\"\n\n";
+                    'MAIL_DRIVER=' . $request->mail_driver . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
+                    'MAIL_FROM_ADDRESS=' . $request->from_mail . "\n" .
+                    'MAIL_FROM_NAME="' . $request->from_name . "\"\n\n";
 
                 break;
 
             case 'sendmail':
                 $oldMailData =
-                    'MAIL_DRIVER='.config('mail.driver')."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
+                    'MAIL_DRIVER=' . config('mail.driver') . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
                     $mailFromCredential;
 
                 $newMailData =
-                    'MAIL_DRIVER='.$request->mail_driver."\n".
-                    'MAIL_HOST='.config('mail.host')."\n".
-                    'MAIL_PORT='.config('mail.port')."\n".
-                    'MAIL_USERNAME='.config('mail.username')."\n".
-                    'MAIL_PASSWORD='.config('mail.password')."\n".
-                    'MAIL_ENCRYPTION='.config('mail.encryption')."\n\n".
-                    'MAIL_FROM_ADDRESS='.$request->from_mail."\n".
-                    'MAIL_FROM_NAME="'.$request->from_name."\"\n\n";
+                    'MAIL_DRIVER=' . $request->mail_driver . "\n" .
+                    'MAIL_HOST=' . config('mail.host') . "\n" .
+                    'MAIL_PORT=' . config('mail.port') . "\n" .
+                    'MAIL_USERNAME=' . config('mail.username') . "\n" .
+                    'MAIL_PASSWORD=' . config('mail.password') . "\n" .
+                    'MAIL_ENCRYPTION=' . config('mail.encryption') . "\n\n" .
+                    'MAIL_FROM_ADDRESS=' . $request->from_mail . "\n" .
+                    'MAIL_FROM_NAME="' . $request->from_name . "\"\n\n";
 
                 break;
         }
@@ -432,7 +431,7 @@ class EnvironmentManager
         $diskData = $this->getDiskData($request);
 
         try {
-            if (! $diskData['old_default_driver']) {
+            if (!$diskData['old_default_driver']) {
                 file_put_contents($this->envPath, $diskData['default_driver'], FILE_APPEND);
             } else {
                 file_put_contents($this->envPath, str_replace(
@@ -442,7 +441,7 @@ class EnvironmentManager
                 ));
             }
 
-            if (! $diskData['old_disk_data']) {
+            if (!$diskData['old_disk_data']) {
                 file_put_contents($this->envPath, $diskData['new_disk_data'], FILE_APPEND);
             } else {
                 file_put_contents($this->envPath, str_replace(
@@ -471,73 +470,73 @@ class EnvironmentManager
 
         if ($request->default_driver) {
             if (env('FILESYSTEM_DRIVER') !== null) {
-                $defaultDriver = "\n".'FILESYSTEM_DRIVER='.$request->default_driver."\n";
+                $defaultDriver = "\n" . 'FILESYSTEM_DRIVER=' . $request->default_driver . "\n";
 
                 $oldDefaultDriver =
-                    "\n".'FILESYSTEM_DRIVER='.config('filesystems.default')."\n";
+                    "\n" . 'FILESYSTEM_DRIVER=' . config('filesystems.default') . "\n";
             } else {
                 $defaultDriver =
-                    "\n".'FILESYSTEM_DRIVER='.$request->default_driver."\n";
+                    "\n" . 'FILESYSTEM_DRIVER=' . $request->default_driver . "\n";
             }
         }
 
         switch ($request->selected_driver) {
             case 's3':
                 if (env('AWS_KEY') !== null) {
-                    $oldDiskData = "\n".
-                        'AWS_KEY='.config('filesystems.disks.s3.key')."\n".
-                        'AWS_SECRET="'.config('filesystems.disks.s3.secret')."\"\n".
-                        'AWS_REGION='.config('filesystems.disks.s3.region')."\n".
-                        'AWS_BUCKET='.config('filesystems.disks.s3.bucket')."\n".
-                        'AWS_ROOT='.config('filesystems.disks.s3.root')."\n";
+                    $oldDiskData = "\n" .
+                        'AWS_KEY=' . config('filesystems.disks.s3.key') . "\n" .
+                        'AWS_SECRET="' . config('filesystems.disks.s3.secret') . "\"\n" .
+                        'AWS_REGION=' . config('filesystems.disks.s3.region') . "\n" .
+                        'AWS_BUCKET=' . config('filesystems.disks.s3.bucket') . "\n" .
+                        'AWS_ROOT=' . config('filesystems.disks.s3.root') . "\n";
                 }
 
-                $newDiskData = "\n".
-                    'AWS_KEY='.$request->aws_key."\n".
-                    'AWS_SECRET="'.$request->aws_secret."\"\n".
-                    'AWS_REGION='.$request->aws_region."\n".
-                    'AWS_BUCKET='.$request->aws_bucket."\n".
-                    'AWS_ROOT='.$request->aws_root."\n";
+                $newDiskData = "\n" .
+                    'AWS_KEY=' . $request->aws_key . "\n" .
+                    'AWS_SECRET="' . $request->aws_secret . "\"\n" .
+                    'AWS_REGION=' . $request->aws_region . "\n" .
+                    'AWS_BUCKET=' . $request->aws_bucket . "\n" .
+                    'AWS_ROOT=' . $request->aws_root . "\n";
 
                 break;
 
             case 'doSpaces':
                 if (env('DO_SPACES_KEY') !== null) {
-                    $oldDiskData = "\n".
-                        'DO_SPACES_KEY='.config('filesystems.disks.doSpaces.key')."\n".
-                        'DO_SPACES_SECRET="'.config('filesystems.disks.doSpaces.secret')."\"\n".
-                        'DO_SPACES_REGION='.config('filesystems.disks.doSpaces.region')."\n".
-                        'DO_SPACES_BUCKET='.config('filesystems.disks.doSpaces.bucket')."\n".
-                        'DO_SPACES_ENDPOINT='.config('filesystems.disks.doSpaces.endpoint')."\n";
-                    'DO_SPACES_ROOT='.config('filesystems.disks.doSpaces.root')."\n";
+                    $oldDiskData = "\n" .
+                        'DO_SPACES_KEY=' . config('filesystems.disks.doSpaces.key') . "\n" .
+                        'DO_SPACES_SECRET="' . config('filesystems.disks.doSpaces.secret') . "\"\n" .
+                        'DO_SPACES_REGION=' . config('filesystems.disks.doSpaces.region') . "\n" .
+                        'DO_SPACES_BUCKET=' . config('filesystems.disks.doSpaces.bucket') . "\n" .
+                        'DO_SPACES_ENDPOINT=' . config('filesystems.disks.doSpaces.endpoint') . "\n";
+                    'DO_SPACES_ROOT=' . config('filesystems.disks.doSpaces.root') . "\n";
                 }
 
-                $newDiskData = "\n".
-                    'DO_SPACES_KEY='.$request->do_spaces_key."\n".
-                    'DO_SPACES_SECRET="'.$request->do_spaces_secret."\"\n".
-                    'DO_SPACES_REGION='.$request->do_spaces_region."\n".
-                    'DO_SPACES_BUCKET='.$request->do_spaces_bucket."\n".
-                    'DO_SPACES_ENDPOINT='.$request->do_spaces_endpoint."\n";
-                    'DO_SPACES_ROOT='.$request->do_spaces_root."\n\n";
+                $newDiskData = "\n" .
+                    'DO_SPACES_KEY=' . $request->do_spaces_key . "\n" .
+                    'DO_SPACES_SECRET="' . $request->do_spaces_secret . "\"\n" .
+                    'DO_SPACES_REGION=' . $request->do_spaces_region . "\n" .
+                    'DO_SPACES_BUCKET=' . $request->do_spaces_bucket . "\n" .
+                    'DO_SPACES_ENDPOINT=' . $request->do_spaces_endpoint . "\n";
+                'DO_SPACES_ROOT=' . $request->do_spaces_root . "\n\n";
 
                 break;
 
             case 'dropbox':
                 if (env('DROPBOX_TOKEN') !== null) {
-                    $oldDiskData = "\n".
-                        'DROPBOX_TOKEN='.config('filesystems.disks.dropbox.token')."\n".
-                        'DROPBOX_KEY='.config('filesystems.disks.dropbox.key')."\n".
-                        'DROPBOX_SECRET="'.config('filesystems.disks.dropbox.secret')."\"\n".
-                        'DROPBOX_APP='.config('filesystems.disks.dropbox.app')."\n".
-                        'DROPBOX_ROOT='.config('filesystems.disks.dropbox.root')."\n";
+                    $oldDiskData = "\n" .
+                        'DROPBOX_TOKEN=' . config('filesystems.disks.dropbox.token') . "\n" .
+                        'DROPBOX_KEY=' . config('filesystems.disks.dropbox.key') . "\n" .
+                        'DROPBOX_SECRET="' . config('filesystems.disks.dropbox.secret') . "\"\n" .
+                        'DROPBOX_APP=' . config('filesystems.disks.dropbox.app') . "\n" .
+                        'DROPBOX_ROOT=' . config('filesystems.disks.dropbox.root') . "\n";
                 }
 
-                $newDiskData = "\n".
-                    'DROPBOX_TOKEN='.$request->dropbox_token."\n".
-                    'DROPBOX_KEY='.$request->dropbox_key."\n".
-                    'DROPBOX_SECRET="'.$request->dropbox_secret."\"\n".
-                    'DROPBOX_APP='.$request->dropbox_app."\n".
-                    'DROPBOX_ROOT='.$request->dropbox_root."\n";
+                $newDiskData = "\n" .
+                    'DROPBOX_TOKEN=' . $request->dropbox_token . "\n" .
+                    'DROPBOX_KEY=' . $request->dropbox_key . "\n" .
+                    'DROPBOX_SECRET="' . $request->dropbox_secret . "\"\n" .
+                    'DROPBOX_APP=' . $request->dropbox_app . "\n" .
+                    'DROPBOX_ROOT=' . $request->dropbox_root . "\n";
 
                 break;
         }
@@ -560,14 +559,14 @@ class EnvironmentManager
     {
         try {
             file_put_contents($this->envPath, str_replace(
-                'SANCTUM_STATEFUL_DOMAINS='.env('SANCTUM_STATEFUL_DOMAINS'),
-                'SANCTUM_STATEFUL_DOMAINS='.$request->app_domain,
+                'SANCTUM_STATEFUL_DOMAINS=' . env('SANCTUM_STATEFUL_DOMAINS'),
+                'SANCTUM_STATEFUL_DOMAINS=' . $request->app_domain,
                 file_get_contents($this->envPath)
             ));
 
             file_put_contents($this->envPath, str_replace(
-                'SESSION_DOMAIN='.config('session.domain'),
-                'SESSION_DOMAIN='.explode(':', $request->app_domain)[0],
+                'SESSION_DOMAIN=' . config('session.domain'),
+                'SESSION_DOMAIN=' . explode(':', $request->app_domain)[0],
                 file_get_contents($this->envPath)
             ));
         } catch (Exception $e) {

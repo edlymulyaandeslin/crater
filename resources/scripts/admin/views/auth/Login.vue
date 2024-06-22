@@ -62,15 +62,14 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref, computed } from 'vue'
-import { useNotificationStore } from '@/scripts/stores/notification'
-import { useRouter } from 'vue-router'
-import { required, email, helpers } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/scripts/admin/stores/auth'
-import { handleError } from '@/scripts/helpers/error-handling'
+import { useNotificationStore } from '@/scripts/stores/notification'
+import { useVuelidate } from '@vuelidate/core'
+import { email, helpers, required } from '@vuelidate/validators'
+import axios from 'axios'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
